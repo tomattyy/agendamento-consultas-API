@@ -20,7 +20,7 @@ ENV NODE_ENV=production
 
 COPY package*.json ./
 
-RUN npm ci --omit=dev && \
+RUN npm ci typescript@6 -D --omit=dev && \
     npm cache clean --force
 
 COPY --from=builder /app/dist ./dist
