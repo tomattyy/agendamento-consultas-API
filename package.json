@@ -7,9 +7,13 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "lint": "eslint .",
     "typeorm": "typeorm-ts-node-commonjs",
     "test": "jest --verbose",
-    "test:coverage": "jest --verbose --coverage"
+    "typecheck": "tsc --noEmit",
+    "test:ci": "jest --coverage --runInBand",
+    "test:coverage": "jest --verbose --coverage",
+    "audit": "npm audit --audit-level=high"
   },
   "keywords": [
     "api",
