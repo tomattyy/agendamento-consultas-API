@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm ci
+RUN npm install
 
 COPY . .
 
@@ -17,7 +17,7 @@ WORKDIR /src/app
 
 ENV NODE_ENV=production
 
-RUN npm ci
+RUN npm install
 
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/package*.json ./
