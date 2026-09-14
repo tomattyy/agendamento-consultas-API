@@ -23,15 +23,26 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v6
 
-      - name: Validate deployment
-        run: |
-          echo "Validando artefatos e configuração de Staging..."
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
 
-      - name: Deploy Staging Application
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start staging application
         run: |
-          echo "Simulando deploy da aplicação no ambiente de Staging..."
-          echo "Em ambiente real:"
-          echo "terraform apply / helm upgrade staging"
+          npm run start &
+          sleep 10
+
+      - name: Validate staging
+        run: |
+          curl --fail http://127.0.0.1:3000 || exit 1
 
 
   dast-scan:
@@ -43,12 +54,18 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v6
 
+      - name: Start staging application
+        run: |
+          npm ci
+          npm run build
+          npm run start &
+          sleep 10
+
       - name: OWASP ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.15.0
         with:
-          target: 'https://staging.exemplo.com'
-          rules_file_name: '.zap/rules.tsv'
-          cmd_options: '-a'
+          target: "http://127.0.0.1:3000"
+          cmd_options: "-a"
 
 
   deploy-production:
@@ -65,10 +82,8 @@ jobs:
 
       - name: Production Deployment
         run: |
-          echo "DAST e Quality Gates aprovados!"
+          echo "DAST aprovado!"
           echo "Executando deploy em Produção..."
-          echo "Em ambiente real:"
-          echo "terraform apply / helm upgrade production"
 
       - name: Enable Monitoring
         run: |
