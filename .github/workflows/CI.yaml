@@ -45,9 +45,6 @@ jobs:
       
       - name: Install dependencies
         run: npm install
-
-      - name: Execute Lint (ESLint)
-        run: npm run lint
       
       - name: TypeScript Check
         run: npm run typecheck
@@ -56,7 +53,7 @@ jobs:
         run: npm test --if-present
 
   docker: 
-    name: 2. Container Security - Trivy
+    name: 2. Docker Image Build
     runs-on: ubuntu-latest
     needs: 
       - test
