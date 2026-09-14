@@ -1,10 +1,13 @@
 node_modules/
 npm-debug.log
+dist
 .git
 .github
 coverage
 .env
 .env.*
+*.test.ts
+*.spec.ts
 tests
 __tests__
 *.md
